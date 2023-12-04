@@ -11,8 +11,9 @@ export const action = async ({request})=>{
   const data = Object.fromEntries(formData)
 
   try {
+    console.log(data)
     await customFetch.post('/auth/register',data)
-    return null
+    return redirect('/login')
   } catch (error) {
     console.log(error)
     return error
@@ -26,10 +27,11 @@ const Register = () => {
       <Form method='post' className='form'>
       <Logo />
       <h4>Register</h4> 
-       <FormRows type='text' name='first Name' defaultValue='' />
-       <FormRows type='text' name='Last Name' defaultValue='' />
-       <FormRows type='email' name='Email' defaultValue='' />
-       <FormRows type='password' name='Password' defaultValue='' />
+       <FormRows type='text' name='name' defaultValue='' />
+       <FormRows type='text' name='lastName' defaultValue='' />
+       <FormRows type='text' name='location' defaultValue='' />
+       <FormRows type='email' name='email' defaultValue='' />
+       <FormRows type='password' name='password' defaultValue='' />
         <button type='submit' className='btn btn-block'>
           Register
         </button>
