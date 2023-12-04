@@ -32,7 +32,7 @@ app.use('/api/v1/users',authRout,userRouter)
 // Auth routes
 app.use('/api/v1/auth',authRouter)
 // Error handling
-app.use('*',(req,res)=>{
+app.use('*',(rq,res)=>{
   res.status(404).json({message:'Route not found'})
 })
 app.use((err,req,res,next)=>{
@@ -41,10 +41,9 @@ app.use((err,req,res,next)=>{
 app.use(errorHandlerMiddleware)
 // Server
 const PORT = process.env.PORT || 5100
-const MONGO_URL = process.env.MONGO_URL
 // const PORT = 5100
 
-await mongoose.connect(process.env.MONGO_URL, {
+mongoose.connect(process.env.MONGO_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })

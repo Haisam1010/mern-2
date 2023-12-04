@@ -21,3 +21,4 @@ export const authPermission = (...roles)=> {
         next()
     }
 }
+
