@@ -7,34 +7,39 @@ import  {createToken}  from "../utils/tokenUtils.js";
 
 
 export const register = async (req, res) => {
-    const isFirstUser = (await UserModel.countDocuments()) === 0;
-    req.body.role = isFirstUser ? "admin" : "user";
-
-    const hashedpassword = await HashPassword(req.body.password);
-    req.body.password = hashedpassword;
-
-    const User = await UserModel.create(req.body);
-    res.status(StatusCodes.CREATED).json({"message":"User created successfully"});
-};
-
-export const login = async (req, res) => {
-    const loginUser = await UserModel.findOne({email:req.body.email})
-    const isValidUser =  loginUser && await comparePassword(req.body.password,loginUser.password)
-    if(!isValidUser) throw new Unauthenticated("Invalid credentials")
-    const token = createToken({Userid:loginUser._id,role:loginUser.role})
+    const isFirstAccount = (await UserModel.countDocuments()) === 0;
+    req.body.role = isFirstAccount ? 'admin' : 'user';
+  
+    const hashedPassword = await hashPassword(req.body.password);
+    req.body.password = hashedPassword;
+  
+    const user = await UserModel.create(req.body);
+    res.status(StatusCodes.CREATED).json({ msg: 'user created' });
+  };
+  export const login = async (req, res) => {
+    const user = await UserModel.findOne({ email: req.body.email });
+  
+    const isValidUser =
+      user && (await comparePassword(req.body.password, user.password));
+  
+    if (!isValidUser) throw new UnauthenticatedError('invalid credentials');
+  
+    const token = createJWT({ userId: user._id, role: user.role });
+  
     const oneDay = 1000 * 60 * 60 * 24;
-   res.cookie('token',token,{
-         expires:new Date(Date.now()+oneDay),
-         httpOnly:true,
-         secure:process.env.NODE_ENV === "development" 
-   })
-    res.status(StatusCodes.OK).json({"message":"User logged in successfully"});
-};
-
-export const logOut = (req,res)=>{
-    res.cookie('token','logout',{
-        httpOnly:true,
-        expires:new Date(Date.now())
-    })
-    res.status(StatusCodes.OK).json({"message":"User logged out successfully"})
-}
+  
+    res.cookie('token', token, {
+      httpOnly: true,
+      expires: new Date(Date.now() + oneDay),
+      secure: process.env.NODE_ENV === 'development',
+    });
+    res.status(StatusCodes.OK).json({ msg: 'user logged in' });
+  };
+  
+  export const logOut = (req, res) => {
+    res.cookie('token', 'logout', {
+      httpOnly: true,
+      expires: new Date(Date.now()),
+    });
+    res.status(StatusCodes.OK).json({ msg: 'user logged out!' });
+  };
