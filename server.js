@@ -41,9 +41,10 @@ app.use((err,req,res,next)=>{
 app.use(errorHandlerMiddleware)
 // Server
 const PORT = process.env.PORT || 5100
+const MONGO_URL = process.env.MONGO_URL
 // const PORT = 5100
 
-mongoose.connect(process.env.MONGO_URL, {
+await mongoose.connect(process.env.MONGO_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
