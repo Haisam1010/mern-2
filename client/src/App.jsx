@@ -16,7 +16,7 @@ import Admin from './pages/Admin'
 
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login'
-import { loader as dashBoardloader} from './pages/Dashboard'
+import { loader as dashboardLoader } from './pages/Dashboard'
 
 export const defaultDarkTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true';
@@ -52,14 +52,11 @@ const router = createBrowserRouter([
       element: <Login />,
       action:loginAction
     },
-    {
-      path:'/error',
-      element: <Error />
-    },
+   
     {
       path:'/dashboard',
       element: <Dashboard isDarkThemeEnabled = {isDarkThemeEnabled} />,
-      loader: dashBoardloader,
+      loader: dashboardLoader,
       children:[
         {
           index: true,

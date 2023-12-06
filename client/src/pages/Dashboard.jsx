@@ -13,8 +13,6 @@ export const loader = async () => {
     return redirect('/')
   }
 }
-
-
 const DashBoardContext = createContext()
 
 const defaultDarkTheme = () => {
@@ -27,7 +25,6 @@ const Dashboard = ({isDarkThemeEnabled}) => {
 
   const {user} = useLoaderData()
   const navigate = useNavigate()
-
   const [showSidebar,setShowSidebar] = useState(false)
   const [isDarkTheme,setIsDarkTheme] = useState(isDarkThemeEnabled)
 
@@ -35,13 +32,13 @@ const Dashboard = ({isDarkThemeEnabled}) => {
     const newDarktheme = !isDarkTheme
     setIsDarkTheme(newDarktheme)
     document.body.classList.toggle('dark-theme',newDarktheme)
+    localStorage.setItem('darkTheme',newDarktheme)
   }
 
   const toggleSidebar = () => { 
     setShowSidebar(!showSidebar)
     console.log('toggle')
   }
-
 
   const logoutUser = async () => {
     navigate('/');
@@ -54,11 +51,10 @@ const Dashboard = ({isDarkThemeEnabled}) => {
   <main className='dashboard'>
     <SmallSideBar />
     <BigSideBar />
-
     <div>
       <NavBar />
       <div className='dashboard-page'>
-        <Outlet/> 
+        <Outlet context={{user}}/> 
       </div>
     </div>
   </main>

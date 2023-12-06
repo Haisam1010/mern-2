@@ -1,4 +1,4 @@
-import { Link, Form, redirect, useNavigate } from 'react-router-dom';
+import { Link, Form, redirect, useNavigation } from 'react-router-dom';
 import Wrapper from '../wrappers/RegisterLogin'
 import {Logo,FormRows} from '../components'
 import customFetch from '../utils/customFetch'
@@ -9,19 +9,17 @@ export const action = async ({request})=>{
   const data = Object.fromEntries(formData)
   try {
     await customFetch.post('/auth/login', data);
-    toast.success('Login Success')
+    toast.success('Login successful');
     return redirect('/dashboard');
   } catch (error) {
-   // toast.error(error?.response?.data?.message || 'Login Failed')
-   error.msg = error?.response?.data?.message || 'Login Failed'
-    console.log(error)
-    return error
+    toast.error(error?.response?.data?.msg);
+    return error;
   }
 }
 
 const Login = () => {
-  const navigate = useNavigate();
- const isSubmitting = navigate.state === 'submitting'
+  const navigation = useNavigation();
+ const isSubmitting = navigation.state === 'submitting'
 
   return (
     <Wrapper>
@@ -32,9 +30,8 @@ const Login = () => {
       </h4>
       <FormRows type='email' name='email' defaultValue='' />
       <FormRows type='password' name='password' defaultValue='' />
-
       <button type='submit' className='btn btn-block' disabled={isSubmitting} >
-         {isSubmitting ? 'Loading...' : 'submit'}
+         {isSubmitting ? 'submitting' : 'submit'}
       </button>
       <p>
       Not a Member ? <Link to="/register" className='member-btn'> Register </Link>
